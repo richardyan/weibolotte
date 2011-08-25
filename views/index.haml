@@ -1,0 +1,32 @@
+-if session[:atoken]
+  %form{:action => "/update", :method => "POST"}
+    %textarea{:name => "update", :cols => "62", :rows => "5"}
+    %br
+    %input{:type => "submit", :value => "Send"} 
+  %h1
+    friends_timeline
+  -@timeline.each do |weibo|
+    .weibo
+      %img{:src => weibo.user.profile_image_url, :class => "avatar" }
+      %span.text
+        %a{:href => "http://t.sina.com.cn/#{weibo.user.id}", :target => "_blank"}=weibo.user.screen_name
+        %span=weibo.text
+        %br
+        %span=weibo.created_at
+        -if weibo.thumbnail_pic
+          %br
+          %a{:href => weibo.original_pic, :target => "_blank"}
+            %img{:src => weibo.thumbnail_pic, :class => "thumbnail_pic", :alt => weibo.original_pic}
+      -if weibo.retweeted_status
+        .retweeted_status
+          %img{:src => weibo.retweeted_status.user.profile_image_url, :class => "avatar" }
+          %span.text
+            %a{:href => "http://t.sina.com.cn/#{weibo.user.id}", :target => "_blank"}=weibo.retweeted_status.user.screen_name
+            %span=weibo.retweeted_status.text
+            %br
+            %span=weibo.retweeted_status.created_at
+            -if weibo.retweeted_status.thumbnail_pic
+              %br
+              %a{:href => weibo.retweeted_status.original_pic, :target => "_blank"}
+                %img{:src => weibo.retweeted_status.thumbnail_pic, :class => "thumbnail_pic", :alt => weibo.retweeted_status.original_pic}
+    
