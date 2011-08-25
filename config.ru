@@ -1,2 +1,2 @@
 require 'example'
-run Sinatra::Application
+run WeiboLotte
