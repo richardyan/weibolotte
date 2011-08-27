@@ -1,2 +1,2 @@
-require 'example'
+require 'weibolotte'
 run WeiboLotte
