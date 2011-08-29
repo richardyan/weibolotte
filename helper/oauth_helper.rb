@@ -14,4 +14,8 @@ module OauthHelper
     end
     return users
   end
+
+  def getcurrentuser(oauth)
+    return Weibo::Base.new(oauth).user_timeline[0]['user']['screen_name'] 
+  end
 end

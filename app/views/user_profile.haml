@@ -6,6 +6,9 @@
     %input{:type => "submit", :value => "Send"} 
   %h1
     我的微博
+  -if session[:atoken]
+    %a{:href => 'repost'}="转发中奖微博"
+    %br
   -@user_timeline.each do |weibo|
     .weibo
       %img{:src => weibo.user.profile_image_url, :class => "avatar" }

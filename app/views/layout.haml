@@ -1,10 +1,10 @@
+-# coding: utf-8
 !!!
 %html(xml:lang='en' lang='en' xmlns='http://www.w3.org/1999/xhtml')
   %head
     %meta(content='text/html;charset=UTF-8' http-equiv='content-type')
-    %title="weibo gem example"
+    %title="抽奖机器人"
     %link{:href => "/screen.css", :rel =>"stylesheet", :type => "text/css", :media => "screen" }
   %body
-    %h2="weibo gem example"
-    %a{:href => (session[:atoken] ? "/logout" : "/connect")}=(session[:atoken] ? "logout" : "connect")
+    %a{:href => (session[:atoken] ? "/logout" : "/login")}=(session[:atoken] ? "logout" : "login")
     = yield

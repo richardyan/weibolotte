@@ -2,6 +2,7 @@
 Bundler.setup
 %w(sinatra haml oauth sass json weibo).each { |dependency| require dependency }
 enable :sessions
+set :port, 4568
 Weibo::Config.api_key = "287181093"
 Weibo::Config.api_secret = "9077339bcdfd2ae006a6ab0da4590131"
 SERVER       = %{http://api.t.sina.com.cn}
@@ -14,7 +15,6 @@ ACCESS = "287181093"
 SECRET = "9077339bcdfd2ae006a6ab0da4590131"
 PATH = "#{SERVER}#{USERTWEET}#{FLOWING}.json?source=#{ACCESS}"
 APP_DIR = File.dirname(__FILE__)
-startid = File.read("#{APP_DIR}/../tweetid").strip
 
 require "#{APP_DIR}/../helper/oauth_helper"
 include OauthHelper
@@ -48,11 +48,20 @@ text = {
     puts PATH
     puts
     oauth = authorize(Weibo::Config.api_key, Weibo::Config.api_secret)
-    File.open("#{APP_DIR}/../tweetid","w") do |f|
+    puts getcurrentuser(oauth)
+    tweetfile = APP_DIR + "/../tweetid_" + getcurrentuser(oauth)
+    puts "The tweet record file located #{tweetfile}"
+    if File.exist?(tweetfile)
+      startid = File.read(tweetfile).strip
+    else
+      startid = JSON.parse(Net::HTTP.get_response(URI.parse(PATH)).body)[0]['id'] 
+    end
+    File.open(tweetfile,"w+") do |f|
       f.puts(JSON.parse(Net::HTTP.get_response(URI.parse(PATH)).body)[0]['id'])
     end
     JSON.parse(Net::HTTP.get_response(URI.parse(PATH+"&since_id=#{startid}")).body).each do |t|
       if t['retweeted_status']
+        puts "This is a retweet msg"
         comment = {
                  :status => URI.encode("sharing #{getfriends(oauth, YAYAID, 5)}")
                }
@@ -81,14 +90,6 @@ text = {
   post '/update' do
     Weibo::Base.new(authorize(Weibo::Config.api_key, Weibo::Config.api_secret)).update(params[:update])
     redirect "/friends_timeline"
-  end
-  
-  get '/connect' do
-    oauth = Weibo::OAuth.new(Weibo::Config.api_key, Weibo::Config.api_secret)
-    request_token = oauth.consumer.get_request_token
-  
-    session[:rtoken], session[:rsecret] = request_token.token, request_token.secret
-    redirect "#{request_token.authorize_url}&oauth_callback=http://#{request.env["HTTP_HOST"]}/callback"
   end
   
   
