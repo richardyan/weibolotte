@@ -33,12 +33,12 @@ text = {
   end
   
   get "/friends_timeline" do
-    @timeline = Weibo::Base.new(authorize(Weibo::Config.api_key, Weibo::Config.api_secret)).friends_timeline
+    @friend_timeline = Weibo::Base.new(authorize(Weibo::Config.api_key, Weibo::Config.api_secret)).friends_timeline
     haml :friends_timeline
   end
 
   get "/user_profile" do
-    @timeline = Weibo::Base.new(authorize(Weibo::Config.api_key, Weibo::Config.api_secret)).user_timeline
+    @user_timeline = Weibo::Base.new(authorize(Weibo::Config.api_key, Weibo::Config.api_secret)).user_timeline
     haml :user_profile
     
   end
