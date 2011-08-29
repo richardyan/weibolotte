@@ -2,7 +2,7 @@
 Bundler.setup
 %w(sinatra haml oauth sass json weibo).each { |dependency| require dependency }
 enable :sessions
-set :port, 4568
+#set :port, 4568
 Weibo::Config.api_key = "287181093"
 Weibo::Config.api_secret = "9077339bcdfd2ae006a6ab0da4590131"
 SERVER       = %{http://api.t.sina.com.cn}
