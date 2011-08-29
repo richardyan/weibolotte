@@ -73,7 +73,7 @@ text = {
           Weibo::Base.new(oauth).repost(tweet_id,text.merge(comment))
         rescue
         end
-        sleep 60
+        sleep 10
       end
     end
     redirect "/"
