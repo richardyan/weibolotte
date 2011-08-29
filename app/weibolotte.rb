@@ -20,7 +20,7 @@ require "#{APP_DIR}/../helper/oauth_helper"
 include OauthHelper
 
 text = {
-         :status => URI.encode('good ~ @minyooyoo @ainiyqi @richardmaz @maztz @uouyn')
+         :is_comment => 3
          }
 #class WeiboLotte < Sinatra::Base
   get '/' do
@@ -53,15 +53,15 @@ text = {
     end
     JSON.parse(Net::HTTP.get_response(URI.parse(PATH+"&since_id=#{startid}")).body).each do |t|
       if t['retweeted_status']
-        text = {
-                 :status => URI.encode(getfriends(oauth, YAYAID, 5))
+        comment = {
+                 :status => "sharing #{URI.encode(getfriends(oauth, YAYAID, 5))}"
                }
         tweet_id = t['retweeted_status']['id'].to_s
         sender = t['retweeted_status']['user']['id'].to_s
         begin
           Weibo::Base.new(oauth).friendship_create(sender)
           puts text.inspect
-          Weibo::Base.new(oauth).repost(tweet_id,text)
+          Weibo::Base.new(oauth).repost(tweet_id,text.merge(comment))
         rescue
         end
         sleep 60
