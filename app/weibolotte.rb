@@ -54,7 +54,7 @@ text = {
     JSON.parse(Net::HTTP.get_response(URI.parse(PATH+"&since_id=#{startid}")).body).each do |t|
       if t['retweeted_status']
         comment = {
-                 :status => "sharing #{URI.encode(getfriends(oauth, YAYAID, 5))}"
+                 :status => URI.encode("sharing #{getfriends(oauth, YAYAID, 5)}")
                }
         tweet_id = t['retweeted_status']['id'].to_s
         sender = t['retweeted_status']['user']['id'].to_s
